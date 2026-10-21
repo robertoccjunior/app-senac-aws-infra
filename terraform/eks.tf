@@ -53,7 +53,7 @@ module "eks" {
     # Entrada 1: Concede acesso total ao usuário de terminal local do instrutor/aluno
     admin_user = {
       # [id-conta] ARN do usuário IAM criado na conta AWS para gerenciamento via CLI local
-      principal_arn = "arn:aws:iam::556890483198:user/admin-cli"
+      principal_arn = "arn:aws:iam::556890483198:user/admin-cli3"
       # Lista de políticas de acesso ao cluster atribuídas ao usuário
       policy_associations = {
         # Associação com a política de Super Administrador do Cluster
