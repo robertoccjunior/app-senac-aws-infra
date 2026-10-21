@@ -40,22 +40,22 @@ resource "aws_security_group" "nlb_sg" {
 # 2. NETWORK LOAD BALANCER (NLB) PÚBLICO
 # ==============================================================================
 
-# Provisiona um balanceador de carga de rede na camada 4 voltado para a internet
-resource "aws_lb" "external_lb" {
-  # Nome exclusivo atribuído ao balanceador dentro da região
-  name = "senac-mvc-public-nlb"
-  # Define o balanceador como público (Internet-facing) para acesso via navegador web
-  internal = false
-  # Especifica o tipo de balanceador de carga como de rede (Network Load Balancer)
-  load_balancer_type = "network"
-  # Aloca interfaces de rede públicas para o NLB nas subnets públicas da VPC
-  subnets = module.vpc.public_subnets
-  # Vincula o Security Group criado para aplicar as regras de firewall na borda
-  security_groups = [aws_security_group.nlb_sg.id]
-
-  # Distribui as conexões uniformemente entre nós em diferentes zonas de disponibilidade
-  enable_cross_zone_load_balancing = true
-}
+# Provisiona um balanceador de carga de rede na camada 4 voltado para a internet (Desativado - uso direto do NodePort)
+# resource "aws_lb" "external_lb" {
+#   # Nome exclusivo atribuído ao balanceador dentro da região
+#   name = "senac-mvc-public-nlb"
+#   # Define o balanceador como público (Internet-facing) para acesso via navegador web
+#   internal = false
+#   # Especifica o tipo de balanceador de carga como de rede (Network Load Balancer)
+#   load_balancer_type = "network"
+#   # Aloca interfaces de rede públicas para o NLB nas subnets públicas da VPC
+#   subnets = module.vpc.public_subnets
+#   # Vincula o Security Group criado para aplicar as regras de firewall na borda
+#   security_groups = [aws_security_group.nlb_sg.id]
+# 
+#   # Distribui as conexões uniformemente entre nós em diferentes zonas de disponibilidade
+#   enable_cross_zone_load_balancing = true
+# }
 
 # ==============================================================================
 # 3. TARGET GROUP & REGRAS DE CONEXÃO COM O KUBERNETES (EKS)
@@ -137,35 +137,35 @@ resource "aws_security_group_rule" "eks_nodes_ingress_nodeport_cidrs" {
 # 4. LISTENER HTTP DO LOAD BALANCER
 # ==============================================================================
 
-# Cria o ouvinte (Listener) responsável por escutar as conexões do navegador no balanceador
-resource "aws_lb_listener" "nlb_listener" {
-  # Vincula este listener ao Network Load Balancer público provisionado
-  load_balancer_arn = aws_lb.external_lb.arn
-  # Porta de escuta aberta no Load Balancer para o público (porta web HTTP padrão)
-  port = 80
-  # Protocolo TCP na camada de rede
-  protocol = "TCP"
-
-  # Ação executada pelo Listener no momento em que um pacote web é recebido
-  default_action {
-    # Encaminha o fluxo de pacotes recebidos
-    type = "forward"
-    # Destino do encaminhamento: O Target Group que entrega aos nós do EKS
-    target_group_arn = aws_lb_target_group.eks_nodes_tg.arn
-  }
-}
+# Cria o ouvinte (Listener) responsável por escutar as conexões do navegador no balanceador (Desativado)
+# resource "aws_lb_listener" "nlb_listener" {
+#   # Vincula este listener ao Network Load Balancer público provisionado
+#   load_balancer_arn = aws_lb.external_lb.arn
+#   # Porta de escuta aberta no Load Balancer para o público (porta web HTTP padrão)
+#   port = 80
+#   # Protocolo TCP na camada de rede
+#   protocol = "TCP"
+# 
+#   # Ação executada pelo Listener no momento em que um pacote web é recebido
+#   default_action {
+#     # Encaminha o fluxo de pacotes recebidos
+#     type = "forward"
+#     # Destino do encaminhamento: O Target Group que entrega aos nós do EKS
+#     target_group_arn = aws_lb_target_group.eks_nodes_tg.arn
+#   }
+# }
 
 # ==============================================================================
 # 5. OUTPUT: URL PÚBLICA PARA ACESSO NO NAVEGADOR (THYMELEAF)
 # ==============================================================================
 
-# Saída contendo o endereço DNS público para abrir a aplicação web diretamente no navegador
-output "application_public_url" {
-  # Constrói o link completo com o prefixo HTTP e o nome de domínio gerado pelo NLB
-  value = "http://${aws_lb.external_lb.dns_name}"
-  # Descrição amigável para o aluno ou desenvolvedor identificar onde acessar
-  description = "URL Publica do Load Balancer para acessar a aplicacao MVC Thymeleaf no navegador"
-}
+# Saída contendo o endereço DNS público para abrir a aplicação web diretamente no navegador (Desativado)
+# output "application_public_url" {
+#   # Constrói o link completo com o prefixo HTTP e o nome de domínio gerado pelo NLB
+#   value = "http://${aws_lb.external_lb.dns_name}"
+#   # Descrição amigável para o aluno ou desenvolvedor identificar onde acessar
+#   description = "URL Publica do Load Balancer para acessar a aplicacao MVC Thymeleaf no navegador"
+# }
 
 # ==============================================================================
 # 6. LAMBDA AUTHORIZER (COMENTADO - DESATIVADO PARA PROJETOS MVC TRADICIONAIS)
