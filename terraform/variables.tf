@@ -34,3 +34,38 @@ variable "app_health_check_path" {
   default     = "/actuator/health"
   description = "Caminho HTTP verificado pelo ALB (Spring Boot Actuator, o mesmo usado nas probes do Kubernetes)"
 }
+
+# Identificador da instância RDS
+variable "db_identifier" {
+  type        = string
+  default     = "mysql-senac-aws"
+  description = "Identificador da instância RDS MySQL"
+}
+
+# Nome do banco criado inicialmente
+variable "db_name" {
+  type        = string
+  default     = "appdb"
+  description = "Nome do banco de dados inicial"
+}
+
+# Usuário administrador do banco
+variable "db_username" {
+  type        = string
+  default     = "admin"
+  description = "Usuário administrador do MySQL (a senha é gerenciada pelo Secrets Manager)"
+}
+
+# Classe da instância
+variable "db_instance_class" {
+  type        = string
+  default     = "db.t3.micro"
+  description = "Classe da instância RDS"
+}
+
+# Armazenamento em GB
+variable "db_allocated_storage" {
+  type        = number
+  default     = 20
+  description = "Armazenamento do RDS em GB"
+}
