@@ -28,7 +28,7 @@ terraform {
   # O Backend remoto garante que o time compartilhe o mesmo estado sem sobrescrever alterações
   backend "s3" {
     # [id-conta] Nome do bucket S3 criado previamente na AWS para persistência do estado
-    bucket = "tfstate-senac-aws-556890483198"
+    bucket = "tfstate-senac-aws-380347815343"
     # Caminho/chave dentro do bucket onde o arquivo .tfstate ficará guardado
     key = "infra/terraform.tfstate"
     # Região onde o bucket S3 de estado foi provisionado
