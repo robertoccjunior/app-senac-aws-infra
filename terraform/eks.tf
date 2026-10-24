@@ -53,7 +53,7 @@ module "eks" {
     # Entrada 1: Concede acesso total ao usuário de terminal local do instrutor/aluno
     admin_user = {
       # [id-conta] ARN do usuário IAM criado na conta AWS para gerenciamento via CLI local
-      principal_arn = "arn:aws:iam::556890483198:user/admin-cli3"
+      principal_arn = "arn:aws:iam::380347815343:user/admin-cli"
       # Lista de políticas de acesso ao cluster atribuídas ao usuário
       policy_associations = {
         # Associação com a política de Super Administrador do Cluster
@@ -71,7 +71,7 @@ module "eks" {
     # Entrada 2: Concede acesso de Administrador para a Role do GitHub Actions rodar deploys
     github_actions = {
       # [id-conta] ARN da IAM Role assumida pelo runner do GitHub Actions via OIDC
-      principal_arn = "arn:aws:iam::556890483198:role/GitHubActions-Terraform-Role"
+      principal_arn = "arn:aws:iam::380347815343:role/GitHubActions-Terraform-Role"
       # Lista de políticas de acesso atribuídas ao pipeline de automação
       policy_associations = {
         # Associação com a política administrativa do cluster
